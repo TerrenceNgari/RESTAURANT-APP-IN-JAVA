@@ -1,0 +1,358 @@
+:root {
+    --cream: #f7f1e8;
+    --sand: #ead9c5;
+    --ink: #182126;
+    --olive: #566246;
+    --tomato: #b64d3d;
+    --gold: #d7a64a;
+    --white: #fffdf8;
+    --line: rgba(24, 33, 38, 0.12);
+    --shadow: 0 22px 60px rgba(24, 33, 38, 0.12);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Manrope", sans-serif;
+    color: var(--ink);
+    background:
+        radial-gradient(circle at top left, rgba(215, 166, 74, 0.22), transparent 28%),
+        radial-gradient(circle at right, rgba(182, 77, 61, 0.16), transparent 24%),
+        linear-gradient(180deg, #fdf8f1 0%, #f7f1e8 100%);
+}
+
+.page-shell {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 32px 0 48px;
+}
+
+.hero {
+    display: grid;
+    grid-template-columns: 1.6fr 0.8fr;
+    gap: 20px;
+    align-items: stretch;
+    margin-bottom: 24px;
+}
+
+.hero h1,
+.panel h2 {
+    margin: 0;
+    font-family: "Fraunces", serif;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+}
+
+.hero h1 {
+    font-size: clamp(2.6rem, 5vw, 4.8rem);
+    line-height: 0.96;
+    max-width: 10ch;
+}
+
+.hero-copy {
+    max-width: 52ch;
+    margin: 14px 0 0;
+    font-size: 1.05rem;
+    color: rgba(24, 33, 38, 0.76);
+}
+
+.hero-card,
+.panel {
+    background: rgba(255, 253, 248, 0.78);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 26px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(14px);
+}
+
+.hero-card {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(160deg, rgba(86, 98, 70, 0.9), rgba(24, 33, 38, 0.95));
+    color: var(--white);
+}
+
+.hero-card p,
+.hero-card span {
+    margin: 0;
+}
+
+.hero-card strong {
+    font-size: 4rem;
+    font-family: "Fraunces", serif;
+    margin: 8px 0;
+}
+
+.eyebrow {
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.72rem;
+    color: rgba(24, 33, 38, 0.52);
+}
+
+.hero .eyebrow {
+    color: var(--tomato);
+}
+
+.layout-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.85fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.panel {
+    padding: 24px;
+}
+
+.panel-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.flash-stack {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.flash {
+    border-radius: 16px;
+    padding: 14px 16px;
+    font-weight: 600;
+}
+
+.flash.success {
+    background: rgba(86, 98, 70, 0.14);
+    color: #314123;
+}
+
+.flash.error,
+.error-text {
+    color: #8f2518;
+}
+
+.flash.error {
+    background: rgba(182, 77, 61, 0.12);
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 14px;
+}
+
+label {
+    display: grid;
+    gap: 8px;
+    font-weight: 600;
+}
+
+input,
+select,
+button {
+    font: inherit;
+}
+
+input,
+select {
+    width: 100%;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 14px;
+    padding: 12px 14px;
+    color: var(--ink);
+}
+
+input:focus,
+select:focus {
+    outline: 2px solid rgba(215, 166, 74, 0.42);
+    border-color: rgba(215, 166, 74, 0.7);
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 22px 0;
+}
+
+.menu-item,
+.order-card {
+    border: 1px solid rgba(24, 33, 38, 0.08);
+    border-radius: 20px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.menu-item {
+    display: grid;
+    gap: 16px;
+}
+
+.menu-item h3,
+.order-card h3,
+.category-block h3 {
+    margin: 0;
+    font-family: "Fraunces", serif;
+}
+
+.menu-meta,
+.menu-code,
+.order-meta,
+.order-id {
+    margin: 0;
+    color: rgba(24, 33, 38, 0.62);
+}
+
+.menu-order-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 12px;
+}
+
+.menu-order-controls strong {
+    font-size: 1.2rem;
+    color: var(--tomato);
+}
+
+.menu-order-controls label {
+    width: 92px;
+}
+
+.primary-button,
+.status-form button {
+    border: none;
+    border-radius: 999px;
+    padding: 12px 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.primary-button {
+    background: linear-gradient(135deg, var(--tomato), #cb7456);
+    color: var(--white);
+}
+
+.status-form button {
+    background: var(--ink);
+    color: var(--white);
+}
+
+.primary-button:hover,
+.status-form button:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+}
+
+.category-stack,
+.orders-stack {
+    display: grid;
+    gap: 14px;
+}
+
+.category-block {
+    padding: 16px;
+    border-radius: 18px;
+    background: rgba(234, 217, 197, 0.36);
+}
+
+.category-block ul,
+.order-lines {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0;
+}
+
+.category-block li,
+.order-lines li {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(24, 33, 38, 0.08);
+}
+
+.category-block li:last-child,
+.order-lines li:last-child {
+    border-bottom: 0;
+}
+
+.orders-panel {
+    margin-top: 24px;
+}
+
+.order-card {
+    display: grid;
+    gap: 16px;
+}
+
+.order-card-top,
+.order-card-bottom,
+.status-form {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+}
+
+.status-badge {
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(86, 98, 70, 0.14);
+    font-weight: 700;
+}
+
+.status-form {
+    flex-wrap: wrap;
+}
+
+.empty-state {
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(234, 217, 197, 0.32);
+}
+
+@media (max-width: 920px) {
+    .hero,
+    .layout-grid,
+    .field-row {
+        grid-template-columns: 1fr;
+    }
+
+    .order-card-top,
+    .order-card-bottom {
+        flex-direction: column;
+        align-items: start;
+    }
+}
+
+@media (max-width: 640px) {
+    .page-shell {
+        width: min(100% - 20px, 1180px);
+        padding-top: 18px;
+    }
+
+    .panel,
+    .hero-card {
+        padding: 18px;
+    }
+
+    .hero h1 {
+        max-width: none;
+    }
+
+    .menu-grid {
+        grid-template-columns: 1fr;
+    }
+}

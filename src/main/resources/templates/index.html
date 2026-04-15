@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Orders</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="page-shell">
+    <header class="hero">
+        <div>
+            <p class="eyebrow">Restaurant dashboard</p>
+            <h1>Take food orders in the browser.</h1>
+            <p class="hero-copy">Open the menu, enter quantities, and keep order statuses moving from received to completed on one page.</p>
+        </div>
+        <div class="hero-card">
+            <p>Live menu items</p>
+            <strong th:text="${menuItems.size()}">0</strong>
+            <span>Ready for dine-in, takeaway, and delivery.</span>
+        </div>
+    </header>
+
+    <section class="flash-stack" th:if="${successMessage != null or errorMessage != null}">
+        <div class="flash success" th:if="${successMessage != null}" th:text="${successMessage}"></div>
+        <div class="flash error" th:if="${errorMessage != null}" th:text="${errorMessage}"></div>
+    </section>
+
+    <main class="layout-grid">
+        <section class="panel order-panel">
+            <div class="panel-heading">
+                <div>
+                    <p class="eyebrow">New order</p>
+                    <h2>Create an order</h2>
+                </div>
+            </div>
+
+            <form th:action="@{/orders}" th:object="${orderForm}" method="post" class="order-form">
+                <div class="flash error" th:if="${#fields.hasGlobalErrors()}">
+                    <div th:each="error : ${#fields.globalErrors()}" th:text="${error}"></div>
+                </div>
+
+                <div class="field-row">
+                    <label>
+                        <span>Customer name</span>
+                        <input type="text" th:field="*{customerName}" placeholder="e.g. Jane Doe">
+                        <small class="error-text" th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}"></small>
+                    </label>
+                    <label>
+                        <span>Order type</span>
+                        <select th:field="*{orderType}">
+                            <option th:each="type : ${orderTypes}" th:value="${type}" th:text="${#strings.capitalizeWords(type.name().toLowerCase().replace('_', ' '))}"></option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="menu-grid">
+                    <article class="menu-item" th:each="menuItem, itemStat : ${menuItems}">
+                        <input type="hidden" th:field="*{items[__${itemStat.index}__].code}">
+                        <div>
+                            <p class="menu-meta" th:text="${#strings.capitalizeWords(menuItem.category().name().toLowerCase().replace('_', ' '))}"></p>
+                            <h3 th:text="${menuItem.name()}"></h3>
+                            <p class="menu-code" th:text="${menuItem.code()}"></p>
+                        </div>
+                        <div class="menu-order-controls">
+                            <strong th:text="|$${#numbers.formatDecimal(menuItem.price(), 1, 2)}|"></strong>
+                            <label>
+                                <span>Qty</span>
+                                <input type="number" min="0" th:field="*{items[__${itemStat.index}__].quantity}">
+                            </label>
+                        </div>
+                    </article>
+                </div>
+
+                <button type="submit" class="primary-button">Submit order</button>
+            </form>
+        </section>
+
+        <aside class="panel summary-panel">
+            <div class="panel-heading">
+                <div>
+                    <p class="eyebrow">Menu overview</p>
+                    <h2>Categories</h2>
+                </div>
+            </div>
+
+            <div class="category-stack">
+                <section class="category-block" th:each="category : ${T(com.restaurant.model.MenuCategory).values()}">
+                    <h3 th:text="${#strings.capitalizeWords(category.name().toLowerCase().replace('_', ' '))}"></h3>
+                    <ul th:if="${menuByCategory.get(category) != null}">
+                        <li th:each="item : ${menuByCategory.get(category)}">
+                            <span th:text="${item.name()}"></span>
+                            <strong th:text="|$${#numbers.formatDecimal(item.price(), 1, 2)}|"></strong>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+        </aside>
+    </main>
+
+    <section class="panel orders-panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">Operations</p>
+                <h2>Existing orders</h2>
+            </div>
+        </div>
+
+        <div class="empty-state" th:if="${#lists.isEmpty(orders)}">
+            No orders yet. Create the first order above.
+        </div>
+
+        <div class="orders-stack" th:unless="${#lists.isEmpty(orders)}">
+            <article class="order-card" th:each="order : ${orders}">
+                <div class="order-card-top">
+                    <div>
+                        <p class="order-id" th:text="${'Order #' + order.orderId}"></p>
+                        <h3 th:text="${order.customerName}"></h3>
+                        <p class="order-meta" th:text="${#strings.capitalizeWords(order.orderType.name().toLowerCase().replace('_', ' ')) + ' | ' + #temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm')}"></p>
+                    </div>
+                    <div class="status-badge" th:text="${#strings.capitalizeWords(order.status.name().toLowerCase())}"></div>
+                </div>
+
+                <ul class="order-lines">
+                    <li th:each="item : ${order.items}">
+                        <span th:text="|${item.menuItem.name()} x${item.quantity}|"></span>
+                        <strong th:text="|$${#numbers.formatDecimal(item.lineTotal, 1, 2)}|"></strong>
+                    </li>
+                </ul>
+
+                <div class="order-card-bottom">
+                    <strong th:text="|Total: $${#numbers.formatDecimal(order.totalAmount, 1, 2)}|"></strong>
+                    <form th:action="@{/orders/{orderId}/status(orderId=${order.orderId})}" method="post" class="status-form">
+                        <select name="status">
+                            <option th:each="status : ${orderStatuses}" th:value="${status}" th:text="${#strings.capitalizeWords(status.name().toLowerCase())}" th:selected="${status == order.status}"></option>
+                        </select>
+                        <button type="submit">Update</button>
+                    </form>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+</body>
+</html>
